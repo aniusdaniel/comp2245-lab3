@@ -26,6 +26,8 @@ let deck = [];
 
 const board = document.getElementById("board");
 
+const flippedCards = [];
+
 function buildBoard() {
     deck = shuffle([...fruits, ...fruits]);
 
@@ -47,5 +49,30 @@ function buildBoard() {
         board.appendChild(card);
     });
 }
+
+board.addEventListener("click", function (event) {
+    const card = event.target;
+
+    if (!card.classList.contains("card")) {
+        return;
+    }
+
+    if (card.classList.contains("flipped")) {
+        return;
+    }
+
+    const index = Number(card.dataset.index);
+    const fruit = deck[index];
+
+    card.textContent = fruit.symbol;
+    card.classList.add("flipped");
+
+    card.setAttribute(
+        "aria-label",
+        `Card ${index + 1}, ${fruit.name}`
+    );
+
+    flippedCards.push(card);
+});
 
 buildBoard();
