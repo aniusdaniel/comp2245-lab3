@@ -113,6 +113,18 @@ board.addEventListener("click", function (event) {
                 "That's a pair!";
 
             flippedCards.length = 0;
+
+            const matchedCards =
+                document.querySelectorAll(".matched");
+
+            if (matchedCards.length === deck.length) {
+                statusDisplay.textContent =
+                    `You found all the pairs in ${moves} moves!`;
+
+                statusDisplay.classList.add(
+                    "you-won"
+                );
+            }
         } else {
             statusDisplay.textContent =
                 "Not a pair. Try again.";
