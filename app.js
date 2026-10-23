@@ -36,6 +36,8 @@ const statusDisplay =
 const flippedCards = [];
 
 let moves = 0;
+let waiting = false;
+let timerId = null;
 
 function buildBoard() {
     deck = shuffle([...fruits, ...fruits]);
@@ -67,6 +69,7 @@ board.addEventListener("click", function (event) {
     }
 
     if (
+        waiting ||
         card.classList.contains("flipped") ||
         card.classList.contains("matched")
     ) {
@@ -110,6 +113,44 @@ board.addEventListener("click", function (event) {
                 "That's a pair!";
 
             flippedCards.length = 0;
+        } else {
+            statusDisplay.textContent =
+                "Not a pair. Try again.";
+
+            waiting = true;
+
+            timerId = setTimeout(function () {
+                firstCard.textContent = "";
+                secondCard.textContent = "";
+
+                firstCard.classList.remove(
+                    "flipped"
+                );
+
+                secondCard.classList.remove(
+                    "flipped"
+                );
+
+                const firstNumber =
+                    Number(firstCard.dataset.index) + 1;
+
+                const secondNumber =
+                    Number(secondCard.dataset.index) + 1;
+
+                firstCard.setAttribute(
+                    "aria-label",
+                    `Card ${firstNumber}, face down`
+                );
+
+                secondCard.setAttribute(
+                    "aria-label",
+                    `Card ${secondNumber}, face down`
+                );
+
+                flippedCards.length = 0;
+                waiting = false;
+                timerId = null;
+            }, 1000);
         }
     }
 });
