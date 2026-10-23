@@ -24,9 +24,18 @@ function shuffle(array) {
 
 let deck = [];
 
-const board = document.getElementById("board");
+const board =
+    document.getElementById("board");
+
+const movesDisplay =
+    document.getElementById("moves");
+
+const statusDisplay =
+    document.getElementById("status");
 
 const flippedCards = [];
+
+let moves = 0;
 
 function buildBoard() {
     deck = shuffle([...fruits, ...fruits]);
@@ -57,7 +66,10 @@ board.addEventListener("click", function (event) {
         return;
     }
 
-    if (card.classList.contains("flipped")) {
+    if (
+        card.classList.contains("flipped") ||
+        card.classList.contains("matched")
+    ) {
         return;
     }
 
@@ -73,6 +85,33 @@ board.addEventListener("click", function (event) {
     );
 
     flippedCards.push(card);
+
+    if (flippedCards.length === 2) {
+        moves++;
+        movesDisplay.textContent = moves;
+
+        const firstCard = flippedCards[0];
+        const secondCard = flippedCards[1];
+
+        const firstFruit =
+            deck[Number(firstCard.dataset.index)];
+
+        const secondFruit =
+            deck[Number(secondCard.dataset.index)];
+
+        if (firstFruit.name === secondFruit.name) {
+            firstCard.classList.add("matched");
+            secondCard.classList.add("matched");
+
+            firstCard.disabled = true;
+            secondCard.disabled = true;
+
+            statusDisplay.textContent =
+                "That's a pair!";
+
+            flippedCards.length = 0;
+        }
+    }
 });
 
 buildBoard();
