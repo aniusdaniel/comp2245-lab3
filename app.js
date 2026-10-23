@@ -33,6 +33,9 @@ const movesDisplay =
 const statusDisplay =
     document.getElementById("status");
 
+const newGameButton =
+    document.getElementById("new-game");
+
 const flippedCards = [];
 
 let moves = 0;
@@ -166,5 +169,31 @@ board.addEventListener("click", function (event) {
         }
     }
 });
+
+function startNewGame() {
+    if (timerId !== null) {
+        clearTimeout(timerId);
+        timerId = null;
+    }
+
+    waiting = false;
+    moves = 0;
+
+    flippedCards.length = 0;
+
+    movesDisplay.textContent = moves;
+
+    statusDisplay.textContent =
+        "Turn over two cards to find a matching pair.";
+
+    statusDisplay.classList.remove("you-won");
+
+    buildBoard();
+}
+
+newGameButton.addEventListener(
+    "click",
+    startNewGame
+);
 
 buildBoard();
